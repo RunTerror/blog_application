@@ -1,27 +1,52 @@
+import 'package:blog_application/first_page.dart';
 import 'package:blog_application/sign_in_page.dart';
 import 'package:blog_application/signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final storage = const FlutterSecureStorage();
+  Widget page = const HomePage();
+  @override
+  void initState() {
+    super.initState();
+    checkLogin();
+  }
+
+  void checkLogin() async {
+    var token = await storage.read(key: "token");
+    if (token != null) {
+      setState(() {
+        page = const FirstPage();
+      });
+    } else {
+      setState(() {
+        page = const HomePage();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: HomePage(
-          key: key,
-        ));
+        home: page);
   }
 }
 
@@ -32,36 +57,10 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  late AnimationController _controller1;
-  late Animation<Offset> animation1;
-  late AnimationController _controller2;
-  late Animation<Offset> animation2;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller1 = AnimationController(
-        duration: const Duration(microseconds: 8000), vsync: this);
-    animation1 = Tween<Offset>(
-            begin: const Offset(0.0, 8.0), end: const Offset(0.0, 0.0))
-        .animate(CurvedAnimation(parent: _controller1, curve: Curves.easeIn));
-        _controller1.forward();
-    _controller2 = AnimationController(
-        duration: const Duration(microseconds: 8000), vsync: this);
-    animation2 = Tween<Offset>(
-            begin: const Offset(0.0, 8.0), end: const Offset(0.0, 0.0))
-        .animate(CurvedAnimation(parent: _controller2, curve: Curves.elasticInOut));
-        _controller2.forward();
-  }
+class _HomePageState extends State<HomePage> {
 
 
-  @override
-  void dispose() {
-    super.dispose();
-    _controller1.dispose();
-    _controller2.dispose();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -84,19 +83,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             const SizedBox(
               height: 30,
             ),
-            SlideTransition(
-              position: animation1,
-              child: const Text(
+            const Text(
                 "DevStack",
                 style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-              ),
             ),
             const SizedBox(
               height: 180,
             ),
             InkWell(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
                     return SignUpPage();
                   }));
                 },
@@ -124,9 +121,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
                 TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                        return const SignInPage(
-                        );
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return const SignInPage();
                       }));
                     },
                     child: const Text(
@@ -141,9 +138,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget boxContainer(String path, String text) {
-    return SlideTransition(
-      position: animation2,
-      child: SizedBox(
+    return  SizedBox(
         height: MediaQuery.of(context).size.height / 10,
         width: MediaQuery.of(context).size.width / 1.5,
         child: Card(
@@ -157,14 +152,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ),
               Text(
                 text,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
               ),
               const SizedBox(
                 width: 8,
               )
             ],
           ),
-        ),
       ),
     );
   }

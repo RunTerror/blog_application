@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'package:blog_application/first_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:blog_application/network_handler.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +13,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final storage = const FlutterSecureStorage();
   bool vis = true;
   final _gloabalkey = GlobalKey<FormState>();
   TextEditingController signupcontroller = TextEditingController();
@@ -99,7 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        errorText: validate? null: errorText,
+          errorText: validate ? null : errorText,
           labelText: text,
           border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(100)))),
@@ -167,19 +172,28 @@ class _SignUpPageState extends State<SignUpPage> {
             circular = true;
           });
           await checkUser();
-          if (_gloabalkey.currentState!.validate() && validate ) {
+          if (_gloabalkey.currentState!.validate() && validate) {
             Map<String, String> data = {
               "userName": usernamecontroller.text,
               "email": signupcontroller.text,
               "password": passwordcontroller.text
             };
-            print(data);
-            await NetworkHandler.post("/user/register", data);
-            setState(() {
-              circular=false;
-            });
-
-            // print("validated");
+            var response = await NetworkHandler.post("/user/register", data);
+            if (response.statusCode == 200 || response.statusCode == 201) {
+              if (context.mounted) {
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                  builder: (context) {
+                    return const FirstPage();
+                  },
+                ), (route) => false);
+              }
+              var res = jsonDecode(response.body);
+              print(res["token"]);
+              await storage.write(key: "token", value: res["token"]);
+              setState(() {
+                circular = false;
+              });
+            }
           } else {
             setState(() {
               circular = false;

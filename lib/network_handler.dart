@@ -23,10 +23,6 @@ class NetworkHandler {
     var res = await http.post(uri,
         body: json.encode(userData),
         headers: {"Content-type": "application/json"});
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      print(res.body);
-    } else {
-      print("not saved");
-    }
+    return res;
   }
 }

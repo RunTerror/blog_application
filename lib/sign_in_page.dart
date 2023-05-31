@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:blog_application/main.dart';
 import 'package:blog_application/network_handler.dart';
 import 'package:flutter/material.dart';
+
+import 'first_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -9,6 +14,7 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final storage=const FlutterSecureStorage();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool vis = true;
@@ -49,7 +55,23 @@ class _SignInPageState extends State<SignInPage> {
             const SizedBox(
               height: 20,
             ),
-            button()
+            button(),
+            const SizedBox(
+              height: 20,
+            ),
+            const Divider(endIndent: 30,indent: 30,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+              TextButton(onPressed: (){
+
+              }, child:const Text("Forgot Password?")),
+              TextButton(onPressed: (){
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+                  return const HomePage();
+                }));
+              }, child:const Text("New User?")),
+            ],)
           ],
         ),
       ),
@@ -76,12 +98,22 @@ class _SignInPageState extends State<SignInPage> {
       height: 60,
       width: 150,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async{
           Map<String, String> data={
             "userName": usernameController.text,
             "password": passwordController.text
           };
-          NetworkHandler.post("/user/login", data);
+          var response=await NetworkHandler.post("/user/login", data);
+          if(response.statusCode==200 || response.statusCode==201){
+            if(context.mounted) {
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
+              return const FirstPage();
+            }));
+            }
+            var res=jsonDecode(response.body);
+            print(res["token"]);
+            await storage.write(key: "token",value: res["token"]);
+          }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color.fromARGB(255, 92, 148, 93),
