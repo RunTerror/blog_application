@@ -1,3 +1,5 @@
+import 'package:blog_application/sign_in_page.dart';
+import 'package:blog_application/signup_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -93,7 +95,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               height: 180,
             ),
             InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                    return SignUpPage();
+                  }));
+                },
                 child:
                     boxContainer("images/google.jpg", "Sign up with google")),
             const SizedBox(
@@ -117,7 +123,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                        return const SignInPage(
+                        );
+                      }));
+                    },
                     child: const Text(
                       "Sign In",
                     ))
