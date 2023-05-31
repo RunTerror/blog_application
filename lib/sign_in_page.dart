@@ -14,7 +14,7 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final storage=const FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool vis = true;
@@ -59,19 +59,25 @@ class _SignInPageState extends State<SignInPage> {
             const SizedBox(
               height: 20,
             ),
-            const Divider(endIndent: 30,indent: 30,),
+            const Divider(
+              endIndent: 30,
+              indent: 30,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-              TextButton(onPressed: (){
-
-              }, child:const Text("Forgot Password?")),
-              TextButton(onPressed: (){
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-                  return const HomePage();
-                }));
-              }, child:const Text("New User?")),
-            ],)
+                TextButton(
+                    onPressed: () {}, child: const Text("Forgot Password?")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) {
+                        return const HomePage();
+                      }));
+                    },
+                    child: const Text("New User?")),
+              ],
+            )
           ],
         ),
       ),
@@ -85,6 +91,7 @@ class _SignInPageState extends State<SignInPage> {
         if (value!.isEmpty) {
           return "username can't be empty";
         }
+        return null;
       },
       decoration: InputDecoration(
           labelText: text,
@@ -98,21 +105,22 @@ class _SignInPageState extends State<SignInPage> {
       height: 60,
       width: 150,
       child: ElevatedButton(
-        onPressed: () async{
-          Map<String, String> data={
+        onPressed: () async {
+          Map<String, String> data = {
             "userName": usernameController.text,
             "password": passwordController.text
           };
-          var response=await NetworkHandler.post("/user/login", data);
-          if(response.statusCode==200 || response.statusCode==201){
-            if(context.mounted) {
-              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
-              return const FirstPage();
-            }));
+          var response = await NetworkHandler.post("/user/login", data);
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            if (context.mounted) {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return const FirstPage();
+              }));
             }
-            var res=jsonDecode(response.body);
+            var res = jsonDecode(response.body);
             print(res["token"]);
-            await storage.write(key: "token",value: res["token"]);
+            await storage.write(key: "token", value: res["token"]);
           }
         },
         style: ElevatedButton.styleFrom(
@@ -147,19 +155,25 @@ class _SignInPageState extends State<SignInPage> {
       obscureText: vis,
       controller: controller,
       decoration: InputDecoration(
-          suffixIcon: IconButton(
-            icon: vis == true
-                ? const Icon(Icons.visibility_off)
-                : const Icon(Icons.visibility),
-            onPressed: () {
-              setState(() {
-                vis = !vis;
-              });
-            },
+        suffixIcon: IconButton(
+          icon: vis == true
+              ? const Icon(Icons.visibility_off)
+              : const Icon(Icons.visibility),
+          onPressed: () {
+            setState(() {
+              vis = !vis;
+            });
+          },
+        ),
+        labelText: text,
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              100,
+            ),
           ),
-          labelText: text,
-          border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(100)))),
+        ),
+      ),
     );
   }
 }
