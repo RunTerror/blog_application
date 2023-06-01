@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
-                    return SignUpPage();
+                    return const SignUpPage();
                   }));
                 },
                 child:
