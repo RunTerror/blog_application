@@ -1,5 +1,6 @@
 import 'package:blog_application/screens/home_screen.dart';
 import 'package:blog_application/screens/profile_screen.dart';
+import 'package:blog_application/screens/profile_update.dart';
 import 'package:flutter/material.dart';
 
 class FirstPage extends StatefulWidget {
@@ -10,7 +11,7 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> {
-  List<Widget> pages = const [HomeScreen(), ProfileScreen()];
+  List<Widget> pages = const [HomeScreen(), ProfileUpdate()];
   List<String> titles=["Home Screen", "Profile Screen"];
   var currentpage = 0;
 

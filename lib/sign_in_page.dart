@@ -131,7 +131,7 @@ class _SignInPageState extends State<SignInPage> {
               borderRadius: BorderRadius.circular(40)),
         ),
         child: const Text(
-          "Sign up",
+          "Sign in",
           style: TextStyle(
             color: Colors.black,
           ),
