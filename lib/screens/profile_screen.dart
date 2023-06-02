@@ -37,15 +37,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
             dobtextField(),
             titletextField(),
             abouttextField(),
-            Center(
-              child: Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width/2,
-                decoration:const BoxDecoration(
-                  color: Colors.teal
+            InkWell(
+              onTap: () {
+                if(_globalKey.currentState!.validate()){
+                  print("validated");
+                }
+              },
+              child: Center(
+                child: 
+                  Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width/2,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.teal
+                    ),
+                    child: const Center(child:  Text("Save", style: TextStyle(fontWeight: FontWeight.w500),)),
+                  ),
                 ),
-              ),
-            )
+            ),
           ],
         ),
       ),
@@ -151,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
         validator: (value) {
-          if (value == null) {
+          if (value!.isEmpty) {
             return "Name can't be empty";
           }
           return null;
@@ -176,7 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
         validator: (value) {
-          if (value == null) {
+          if (value!.isEmpty) {
             return "dob can't be null";
           }
           return null;
@@ -201,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
         validator: (value) {
-          if (value == null) {
+          if (value!.isEmpty) {
             return "title can't be null";
           }
           return null;
@@ -226,7 +236,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
         validator: (value) {
-          if (value == null) {
+          if (value!.isEmpty) {
             return "about can't be null";
           }
           return null;
@@ -251,7 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
         validator: (value) {
-          if (value == null) {
+          if (value!.isEmpty) {
             return "about can't be null";
           }
           return null;

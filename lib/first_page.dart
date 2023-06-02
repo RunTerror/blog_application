@@ -1,5 +1,4 @@
 import 'package:blog_application/screens/home_screen.dart';
-import 'package:blog_application/screens/profile_screen.dart';
 import 'package:blog_application/screens/profile_update.dart';
 import 'package:flutter/material.dart';
 

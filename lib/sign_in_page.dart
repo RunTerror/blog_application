@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:blog_application/main.dart';
 import 'package:blog_application/network_handler.dart';
 import 'package:flutter/material.dart';
 
 import 'first_page.dart';
+import 'landing_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});

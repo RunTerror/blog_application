@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blog_application/first_page.dart';
+import 'package:blog_application/sign_in_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:blog_application/network_handler.dart';
@@ -68,7 +69,18 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                circular ? const CircularProgressIndicator() : button()
+                circular ? const CircularProgressIndicator() : button(),
+                const SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  const Text("Already have an account"),
+                  TextButton(onPressed: (){
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                      return const SignInPage();
+                    }));
+                  }, child:const Text("Sign in"))
+                ],)
               ],
             ),
           ),
