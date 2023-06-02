@@ -1,3 +1,4 @@
+import 'package:blog_application/blog/add_blog.dart';
 import 'package:blog_application/screens/home_screen.dart';
 import 'package:blog_application/screens/profile_update.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,11 @@ class _FirstPageState extends State<FirstPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return const AddBlog();
+          }));
+        },
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomAppBar(

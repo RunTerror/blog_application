@@ -18,6 +18,7 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool vis = true;
+  final _globalKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,50 +36,53 @@ class _SignInPageState extends State<SignInPage> {
               stops: [0, 1],
               tileMode: TileMode.repeated),
         ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 4,
-            ),
-            const Text(
-              "Sign In with Email",
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            usernametextField(usernameController, "username"),
-            const SizedBox(
-              height: 20,
-            ),
-            passwordTextField(passwordController, "password"),
-            const SizedBox(
-              height: 20,
-            ),
-            button(),
-            const SizedBox(
-              height: 20,
-            ),
-            const Divider(
-              endIndent: 30,
-              indent: 30,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                TextButton(
-                    onPressed: () {}, child: const Text("Forgot Password?")),
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) {
-                        return const HomePage();
-                      }));
-                    },
-                    child: const Text("New User?")),
-              ],
-            )
-          ],
+        child: Form(
+          key: _globalKey,
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 4,
+              ),
+              const Text(
+                "Sign In with Email",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              usernametextField(usernameController, "username"),
+              const SizedBox(
+                height: 20,
+              ),
+              passwordTextField(passwordController, "password"),
+              const SizedBox(
+                height: 20,
+              ),
+              button(),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(
+                endIndent: 30,
+                indent: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                      onPressed: () {}, child: const Text("Forgot Password?")),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) {
+                          return const HomePage();
+                        }));
+                      },
+                      child: const Text("New User?")),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -106,21 +110,23 @@ class _SignInPageState extends State<SignInPage> {
       width: 150,
       child: ElevatedButton(
         onPressed: () async {
-          Map<String, String> data = {
-            "userName": usernameController.text,
-            "password": passwordController.text
-          };
-          var response = await NetworkHandler.post("/user/login", data);
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            if (context.mounted) {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return const FirstPage();
-              }));
+          if (_globalKey.currentState!.validate()) {
+            Map<String, String> data = {
+              "userName": usernameController.text,
+              "password": passwordController.text
+            };
+            var response = await NetworkHandler.post("/user/login", data);
+            if (response.statusCode == 200 || response.statusCode == 201) {
+              if (context.mounted) {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return const FirstPage();
+                }));
+              }
+              var res = jsonDecode(response.body);
+              print(res["token"]);
+              await storage.write(key: "token", value: res["token"]);
             }
-            var res = jsonDecode(response.body);
-            print(res["token"]);
-            await storage.write(key: "token", value: res["token"]);
           }
         },
         style: ElevatedButton.styleFrom(
@@ -143,12 +149,10 @@ class _SignInPageState extends State<SignInPage> {
   Widget passwordTextField(controller, String text) {
     return TextFormField(
       validator: (value) {
-        if (value == null) {
+        if (value!.isEmpty) {
           return "password can't be empty";
-        } else {
-          if (value.length < 8) {
-            return "password length should be more than 7";
-          }
+        } else if (value.length < 8) {
+          return "length can't be less than 8";
         }
         return null;
       },

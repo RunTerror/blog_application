@@ -21,40 +21,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(onPressed: () {
+          Navigator.of(context).pop();
+        }, icon: const Icon(Icons.clear)),
+      ),
       body: Form(
         key: _globalKey,
         child: ListView(
           children: [
-            const SizedBox(
-              height: 20,
-            ),
-            imageProfile(),
-            const SizedBox(
-              height: 10,
-            ),
-            nametextField(),
-            proffesiontextField(),
-            dobtextField(),
-            titletextField(),
-            abouttextField(),
-            InkWell(
-              onTap: () {
-                if(_globalKey.currentState!.validate()){
-                  print("validated");
-                }
-              },
-              child: Center(
-                child: 
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width/2,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.teal
+            Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                imageProfile(),
+                const SizedBox(
+                  height: 10,
+                ),
+                nametextField(),
+                proffesiontextField(),
+                dobtextField(),
+                titletextField(),
+                abouttextField(),
+                InkWell(
+                  onTap: () {
+                    if (_globalKey.currentState!.validate()) {
+                      print("validated");
+                      Navigator.of(context).pop();
+                    }
+                    
+                  },
+                  child: Center(
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width / 2,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.teal),
+                      child: const Center(
+                          child: Text(
+                        "Save",
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      )),
                     ),
-                    child: const Center(child:  Text("Save", style: TextStyle(fontWeight: FontWeight.w500),)),
                   ),
                 ),
+              ],
             ),
           ],
         ),
@@ -122,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> takePhoto(ImageSource imageSource) async {
-    var pickedFile = await picker.pickImage(source: imageSource);
+    var pickedFile=await picker.pickImage(source: imageSource);
     File file = File(pickedFile!.path);
     setState(() {
       imageFile = file;
