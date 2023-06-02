@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:blog_application/first_page.dart';
 import 'package:blog_application/sign_in_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:blog_application/network_handler.dart';
 import 'package:flutter/material.dart';
 

@@ -20,7 +20,18 @@ class _AddBlogState extends State<AddBlog> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        actions: [TextButton(onPressed: () {}, child: const Text("preview"))],
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: const Text(
+              "preview",
+              style: TextStyle(
+                color: Colors.teal,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        ],
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -93,15 +104,24 @@ class _AddBlogState extends State<AddBlog> {
           prefixIcon: IconButton(
             onPressed: () {
               // takePhoto(ImageSource.camera);
-              
-              showModalBottomSheet(context: context, builder: (context){
-                return BottomSheet(onClosing: (){}, builder: (context) {
-                  return bottomSheet();
-                },);
 
-              });
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return BottomSheet(
+                      onClosing: () {},
+                      builder: (context) {
+                        return bottomSheet();
+                      },
+                    );
+                  });
             },
-            icon:imageFile==null? const Icon(Icons.image):const Icon(Icons.check_box, color: Colors.teal,),
+            icon: imageFile == null
+                ? const Icon(Icons.image)
+                : const Icon(
+                    Icons.check_box,
+                    color: Colors.teal,
+                  ),
           ),
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 1.2),
@@ -111,32 +131,51 @@ class _AddBlogState extends State<AddBlog> {
           labelText: "Add Image and Title"),
     );
   }
-  Widget bottomSheet(){
+
+  Widget bottomSheet() {
     return SizedBox(
       height: 200,
       child: Column(
         children: [
-          const SizedBox(height: 10,),
-          const Text("Select Profile Picture", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text(
+            "Select Profile Picture",
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            IconButton(onPressed: (){
-              takePhoto(ImageSource.camera);
-            }, icon:const Icon(Icons.camera, size: 40,)),
-            const SizedBox(width: 50,),
-            IconButton(onPressed: (){
-              takePhoto(ImageSource.gallery);
-            }, icon:const Icon(Icons.photo, size: 40,))
-          ],)
-          
+              IconButton(
+                  onPressed: () {
+                    takePhoto(ImageSource.camera);
+                  },
+                  icon: const Icon(
+                    Icons.camera,
+                    size: 40,
+                  )),
+              const SizedBox(
+                width: 50,
+              ),
+              IconButton(
+                  onPressed: () {
+                    takePhoto(ImageSource.gallery);
+                  },
+                  icon: const Icon(
+                    Icons.photo,
+                    size: 40,
+                  ))
+            ],
+          )
         ],
       ),
     );
     // return showBottomSheet(context: context, builder: builder)
   }
-
 
   Widget bodytextField() {
     return TextFormField(
